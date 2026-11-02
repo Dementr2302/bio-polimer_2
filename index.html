@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Биодеградируемый клапан</title>
+<meta name="description" content="Разработка нового биодеградируемого полимера для тканевой инженерии сердечного клапана">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,300..800;1,7..72,300..800&family=Golos+Text:wght@400..700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+
+<!-- Колонтитул: оглавление как в журнальной статье -->
+<header class="runhead">
+  <span class="runhead__id">PCL‑Lys</span>
+  <nav>
+    <a href="#aktualnost"><i>I</i>Актуальность</a>
+    <a href="#problema"><i>II</i>Проблематика</a>
+    <a href="#sut"><i>III</i>Суть проекта</a>
+    <a href="#ekonomika"><i>IV</i>₽</a>
+    <a href="#socium"><i>V</i>Значимость</a>
+    <a href="#komanda"><i>VI</i>Команда</a>
+    <a href="#status"><i>VII</i>Статус</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1 class="hero__title">
+    <span class="l1">Разработка нового</span>
+    <span class="l2">биодеградируемого полимера</span>
+    <span class="l3">для тканевой инженерии</span>
+    <span class="l4"><em>сердечного клапана</em></span>
+  </h1>
+
+  <figure class="specimen" id="specimen">
+    <div class="specimen__frame">
+      <canvas id="valve"></canvas>
+      <span class="tick tl"></span><span class="tick tr"></span><span class="tick bl"></span><span class="tick br"></span>
+      <div class="specimen__readout">
+        <span>AZ <b id="ro-az">000</b>°</span>
+        <span>EL <b id="ro-el">00</b>°</span>
+        <span>×<b id="ro-zoom">1.0</b></span>
+      </div>
+      <div class="specimen__tools">
+        <button type="button" data-zoom="-1" aria-label="Отдалить">−</button>
+        <button type="button" data-zoom="1" aria-label="Приблизить">+</button>
+        <button type="button" data-reset aria-label="Сбросить вид">⟲</button>
+      </div>
+      <div class="specimen__hint" id="hint">тяните, чтобы вращать</div>
+      <div class="specimen__loading" id="loading">загрузка модели…</div>
+    </div>
+    <figcaption>3D‑модель трёхстворчатого клапана</figcaption>
+  </figure>
+</section>
+
+<!-- I. АКТУАЛЬНОСТЬ -->
+<section class="sec aktual" id="aktualnost">
+  <h2 class="marg"><i>I</i>Актуальность</h2>
+  <p class="aktual__lede">
+    Сердечно-сосудистые заболевания — ведущая причина смертности в мире: <span class="num">18 млн</span> человек ежегодно (ВОЗ). Значительную долю пациентов составляют люди с врождёнными и приобретёнными пороками сердца, причём большую часть занимают дефекты клапанного аппарата. В России ежегодно выполняется <span class="num">~10 000–12 000</span> операций протезирования клапанов, в мире — <span class="num">&gt; 400 000</span>.
+  </p>
+</section>
+
+<!-- II. ПРОБЛЕМАТИКА -->
+<section class="sec problem" id="problema">
+  <h2 class="marg"><i>II</i>Проблематика: <br>существующие решения несовершенны</h2>
+
+  <div class="ledger">
+    <article class="ledger__row">
+      <div class="ledger__img"><img src="assets/img/mechanical.png" alt="Механический протез клапана" loading="lazy"></div>
+      <h3>Механические протезы</h3>
+      <p>— требуют пожизненной антикоагулянтной терапии (кровотечения — 1–2% в год), риск тромбоза (0,5–1% в год) и эндокардита (1–3% в год), гемолиз, постоянный шум. <mark>Не растут</mark> — критично для детей.</p>
+    </article>
+    <article class="ledger__row">
+      <div class="ledger__img"><img src="assets/img/biological.png" alt="Биологический протез клапана" loading="lazy"></div>
+      <h3>Биологические протезы</h3>
+      <p>— срок службы 10–15 лет, кальцификация и структурная дегенерация (10–15% в первые 10 лет). У пациентов младше 40 лет риск реоперации достигает 25–73%, у детей — повторные операции каждые 10–12 лет. <mark>Не растут.</mark></p>
+    </article>
+    <article class="ledger__row">
+      <div class="ledger__img"><img src="assets/img/tavi.svg" alt="Транскатетерный клапан" loading="lazy"></div>
+      <h3>Транскатетерные методы (TAVI)</h3>
+      <p>— применяются у пациентов &gt; 65 лет, срок работы 10–15 лет, стоимость ~950 000 руб. <mark>Не растут</mark> — не подходят для детей.</p>
+    </article>
+  </div>
+
+  <div class="fork">
+    <p class="fork__q"><b>Главная дилемма для детей:</b></p>
+    <svg class="fork__lines" viewBox="0 0 200 220" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 110 C110 110 90 0.5 200 0.5" />
+      <path d="M0 110 C110 110 90 219.5 200 219.5" />
+    </svg>
+    <p class="fork__a fork__a--up">либо повторные операции каждые 10–12 лет,</p>
+    <p class="fork__a fork__a--down">либо пожизненные антикоагулянты.</p>
+  </div>
+  <p class="growth">Фиксированный размер имплантата не соответствует растущему сердцу.</p>
+</section>
+
+<!-- III. СУТЬ ПРОЕКТА -->
+<section class="sec core" id="sut">
+  <h2 class="marg"><i>III</i>Суть проекта</h2>
+
+  <p class="core__goal">Цель — создание биосовместимого и биодеградируемого полимерного материала на основе поликапролактона с улучшенными адгезивными свойствами для клеток.</p>
+
+  <div class="innov">
+    <div class="innov__text">
+      <h3>Инновационность.</h3>
+      <p>Поликапролактон гидрофобен — клетки плохо прикрепляются. Мы впервые применили L-лизин как инициатор полимеризации (а не просто модификатор) для скаффолда сердечного клапана. Это позволяет отказаться от токсичных металлоорганических катализаторов: лизин встраивается в полимерную цепь на этапе синтеза. Результат — адгезия клеток выше на <span class="num">40–50%</span> без потери прочности (<span class="num">~18 МПа</span>).</p>
+    </div>
+    <figure class="innov__fig">
+      <img src="assets/img/synthesis.png" alt="Схема синтеза: L-лизин и ε-капролактон, 200 °C, 16 ч" loading="lazy">
+    </figure>
+  </div>
+
+  <div class="howto" id="howto">
+    <div class="howto__sticky">
+      <div class="howto__text">
+        <h3>Как это работает.</h3>
+        <p>На матрикс высеваются аутологичные клетки пациента — они прикрепляются, размножаются и формируют живую ткань. Полимерный каркас безопасно растворяется, замещаясь собственными тканями пациента.</p>
+        <div class="meters">
+          <div class="meter"><span>полимерный каркас</span><i><b id="m-scaf"></b></i></div>
+          <div class="meter meter--tissue"><span>собственные ткани</span><i><b id="m-tis"></b></i></div>
+        </div>
+      </div>
+      <svg class="tissue" id="tissue" viewBox="0 0 400 400" aria-hidden="true"></svg>
+    </div>
+  </div>
+
+  <div class="method">
+    <h3 class="method__h">Методология.</h3>
+    <ol class="track">
+      <li class="done">
+        <p>Синтез сополимера полимеризацией с раскрытием цикла ε-капролактона при <span class="nowrap">200 °C</span> в аргоне, где L-лизин — нуклеофильный инициатор.</p>
+      </li>
+      <li class="done">
+        <p>Структура подтверждена методами ИК- и ЯМР-спектроскопии.</p>
+        <div class="figs figs--2">
+          <figure><img src="assets/img/ir.png" alt="ИК-спектр" loading="lazy"><figcaption>Рисунок 1. ИК-спектр сополимера PCL-Lys в вазелиновом масле</figcaption></figure>
+          <figure><img src="assets/img/nmr.jpg" alt="ЯМР-спектр" loading="lazy"><figcaption>Рисунок 2. ¹H ЯМР-спектр полимера PCL-Lys</figcaption></figure>
+        </div>
+      </li>
+      <li class="done">
+        <p>In vitro — отсутствие цитотоксичности.</p>
+        <div class="figs figs--2 figs--photo">
+          <figure><img src="assets/img/lab-1.jpg" alt="МТТ-тест" loading="lazy"></figure>
+          <figure><img src="assets/img/lab-2.jpg" alt="МТТ-тест" loading="lazy"></figure>
+        </div>
+      </li>
+      <li class="now">
+        <p>Сейчас — доклинические исследования in vivo.</p>
+        <div class="figs figs--4 figs--veil" id="veil">
+          <figure><img src="assets/img/invivo-8.jpg" alt="" loading="lazy"></figure>
+          <figure><img src="assets/img/invivo-9.jpg" alt="" loading="lazy"></figure>
+          <figure><img src="assets/img/invivo-10.jpg" alt="" loading="lazy"></figure>
+          <figure><img src="assets/img/invivo-11.jpg" alt="" loading="lazy"></figure>
+          <button type="button" class="veil__btn">показать фото операций</button>
+        </div>
+      </li>
+      <li class="next">
+        <p>Далее — оценка гемосовместимости и создание опытного образца клапана методом 3D-печати.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- IV. ЭКОНОМИКА -->
+<section class="sec econ" id="ekonomika">
+  <h2 class="marg marg--glyph"><i>IV</i>₽</h2>
+
+  <div class="econ__body">
+    <p>Себестоимость отечественного биодеградируемого скаффолда составит 40 000 – 50 000 рублей, что в 4–5 раз дешевле импортных биологических протезов (от 200 000 рублей). Материал исключает необходимость пожизненного приёма антикоагулянтов с контролем МНО (экономия ~50 000 рублей в год) и повторных операций (каждая стоит 200 000 – 500 000 рублей). Совокупный экономический эффект на одном пациенте достигает 500 000 рублей за счёт исключения реопераций и лекарственной терапии. Снижение затрат системы здравоохранения — до 75%, имплант окупается через 5–10 лет. Проект обеспечивает реальное импортозамещение и снижает зависимость от зарубежных производителей.</p>
+
+    <div class="scale" aria-hidden="true">
+      <div class="scale__row">
+        <span class="scale__bar scale__bar--ours" style="--w:25%"></span>
+        <span class="scale__lbl">40 000 – 50 000</span>
+      </div>
+      <div class="scale__row">
+        <span class="scale__bar" style="--w:100%"></span>
+        <span class="scale__lbl">от 200 000</span>
+      </div>
+    </div>
+  </div>
+
+  <ul class="tally">
+    <li><span>Экономия на 1 пациенте —</span> <b>до 500 000 руб.</b></li>
+    <li><span>Снижение затрат системы здравоохранения —</span> <b>до 75%.</b></li>
+    <li><span>Имплант окупается через</span> <b>5–10 лет.</b></li>
+    <li><b>Реальное импортозамещение.</b></li>
+  </ul>
+</section>
+
+<!-- V. СОЦИАЛЬНАЯ ЗНАЧИМОСТЬ -->
+<section class="sec social" id="socium">
+  <h2 class="marg"><i>V</i>Социальная значимость</h2>
+  <ol class="social__list">
+    <li>Отказ от пожизненных антикоагулянтов.</li>
+    <li>Возможность роста имплантата у детей — без повторных операций.</li>
+    <li>Снижение инвалидизации и смертности.</li>
+    <li>Развитие регенеративной медицины в Краснодарском крае и РФ.</li>
+  </ol>
+</section>
+
+<!-- VI. КОМАНДА -->
+<section class="sec team" id="komanda">
+  <h2 class="marg"><i>VI</i>Команда проекта</h2>
+  <ul class="credits">
+    <li><img src="assets/img/druzhinina.jpg" alt="" loading="lazy"><b>Дружинина В.Е.</b><span>Клинический ординатор 1 года, «Детская хирургия», КубГМУ · автор</span></li>
+    <li><img src="assets/img/popov.jpg" alt="" loading="lazy"><b>Попов К.А.</b><span>Д.м.н., заведующий Научно-технологическим центром биомедицины КубГМУ</span></li>
+    <li><img src="assets/img/dotsenko.jpg" alt="" loading="lazy"><b>Доценко В.В.</b><span>Профессор, д.х.н., заведующий кафедрой органической химии и технологий</span></li>
+    <li><img src="assets/img/tsekhomsky.jpg" alt="" loading="lazy"><b>Цехомский А.В.</b><span>Студент 6 курса лечебного факультета КубГМУ</span></li>
+    <li><img src="assets/img/fedorenko.jpg" alt="" loading="lazy"><b>Федоренко А.Д.</b><span>Клинический ординатор 2 года, «Нейрохирургия», КубГМУ</span></li>
+    <li><img src="assets/img/tsimmer.jpg" alt="" loading="lazy"><b>Циммер И. А.</b><span>Клинический ординатор 2 года, «Анестезиология и реанимация», КубГМУ</span></li>
+  </ul>
+</section>
+
+<!-- VII. СТАТУС -->
+<footer class="sec status" id="status">
+  <h2 class="marg"><i>VII</i>Статус</h2>
+  <div class="status__doc">
+    <p>Поддержан грантом Фонда содействия инновациям («Умник», договор №19526ГУ/2025). Соответствует приоритетам научно-технологического развития РФ (Указ Президента №529) и политике здравоохранения Краснодарского края (распоряжение губернатора №157-р).</p>
+    <div class="stamp" aria-hidden="true">№19526ГУ/2025</div>
+  </div>
+</footer>
+
+<script src="assets/valve.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
